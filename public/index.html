@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>IceBel.by — Оформление розничных договоров ООО «АйсикБел»</title>
+  <meta name="description" content="Официальный сервис автоматического формирования договоров купли-продажи оборудования ООО «АйсикБел». Генерация Word и интеграция с Google Drive.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- Atmospheric Neon Ice Glows -->
+  <div class="bg-glow bg-glow-cyan"></div>
+  <div class="bg-glow bg-glow-blue"></div>
+
+  <!-- Header with Official IceBel.by Emblem -->
+  <header class="app-header" id="app-header">
+    <div class="header-container">
+      <div class="brand-group">
+        <div class="logo-medallion" id="logo-medallion">
+          <img src="logo.jpg" alt="IceBel.by" class="brand-logo-img" id="brand-logo-img">
+        </div>
+        <div class="brand-titles">
+          <h1 class="brand-title">IceBel<span class="brand-domain">.by</span> <span class="brand-tag">Contracts</span></h1>
+          <p class="brand-subtitle">ООО «АйсикБел» • Розничные договоры купли-продажи</p>
+        </div>
+      </div>
+
+      <!-- Navigation Tabs -->
+      <nav class="nav-tabs" id="nav-tabs" aria-label="Навигация">
+        <button class="nav-btn active" id="btn-tab-create" type="button" aria-controls="tab-create" aria-selected="true">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+          <span>Новый договор</span>
+        </button>
+        <button class="nav-btn" id="btn-tab-journal" type="button" aria-controls="tab-journal" aria-selected="false">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
+          <span>Журнал договоров</span>
+          <span class="badge" id="journal-count-badge">0</span>
+        </button>
+      </nav>
+
+      <!-- System Status -->
+      <div class="system-status" id="system-status" title="Статус сервера">
+        <span class="status-dot online" id="status-dot"></span>
+        <span class="status-label" id="status-label">Сервер готов</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="app-main" id="app-main">
+    <!-- VIEW 1: CREATE CONTRACT FORM -->
+    <div class="view-panel active" id="tab-create" role="tabpanel" aria-labelledby="btn-tab-create">
+      <form id="contract-form" novalidate>
+        <div class="layout-grid">
+          <!-- Left Column: Form Sections -->
+          <div class="form-main-col">
+            
+            <!-- SECTION 1: Buyer Info -->
+            <section class="card glass-card" id="section-buyer" aria-labelledby="buyer-heading">
+              <div class="card-header">
+                <div class="card-icon-title">
+                  <span class="section-number">1</span>
+                  <div>
+                    <h2 class="card-title" id="buyer-heading">Данные покупателя</h2>
+                    <p class="card-desc">ФИО, номер телефона и адрес для договора</p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="card-body">
+                <div class="form-row-grid">
+                  <!-- FIO -->
+                  <div class="form-group span-2">
+                    <label class="form-label" for="input-fio">
+                      ФИО покупателя <span class="req">*</span>
+                    </label>
+                    <div class="input-wrapper">
+                      <input 
+                        type="text" 
+                        id="input-fio" 
+                        class="form-control" 
+                        placeholder="Конопацкий Илья Сергеевич" 
+                        required 
+                        autocomplete="name"
+                        autocapitalize="words"
+                      >
+                      <button type="button" class="btn-clear-input" id="btn-clear-fio" title="Очистить">✕</button>
+                    </div>
+                    <span class="field-hint">Фамилия, имя и отчество полностью. Заглавные буквы подставятся автоматически.</span>
+                  </div>
+
+                  <!-- Phone -->
+                  <div class="form-group">
+                    <label class="form-label" for="input-phone">
+                      Номер телефона <span class="req">*</span>
+                    </label>
+                    <div class="input-wrapper">
+                      <input 
+                        type="tel" 
+                        id="input-phone" 
+                        class="form-control" 
+                        placeholder="+375 (29) 000-00-00" 
+                        required 
+                        autocomplete="tel"
+                        inputmode="tel"
+                      >
+                    </div>
+                    <span class="field-hint">Белорусский номер (+375...)</span>
+                  </div>
+
+                  <!-- Date -->
+                  <div class="form-group">
+                    <label class="form-label" for="input-date">
+                      Дата договора <span class="req">*</span>
+                    </label>
+                    <div class="input-wrapper">
+                      <input 
+                        type="date" 
+                        id="input-date" 
+                        class="form-control" 
+                        required
+                      >
+                    </div>
+                    <span class="field-hint">Определяет суточный номер (01, 02...)</span>
+                  </div>
+
+                  <!-- Address -->
+                  <div class="form-group span-2">
+                    <div class="label-with-tools">
+                      <label class="form-label" for="input-address">
+                        Адрес доставки / монтажа <span class="req">*</span>
+                      </label>
+                      <div class="quick-helpers">
+                        <button type="button" class="chip-btn" id="chip-minsk">+ г. Минск</button>
+                        <button type="button" class="chip-btn" id="chip-house">+ Частный дом</button>
+                      </div>
+                    </div>
+                    <div class="input-wrapper">
+                      <input 
+                        type="text" 
+                        id="input-address" 
+                        class="form-control" 
+                        placeholder="г. Минск, ул. Янки Лучины, д. 22, кв. 52" 
+                        required
+                      >
+                    </div>
+                    <span class="field-hint">«Республика Беларусь» будет добавлена автоматически в начало адреса.</span>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            <!-- SECTION 2: Goods & Services -->
+            <section class="card glass-card" id="section-items" aria-labelledby="items-heading">
+              <div class="card-header items-header">
+                <div class="card-icon-title">
+                  <span class="section-number">2</span>
+                  <div>
+                    <h2 class="card-title" id="items-heading">Спецификация оборудования и гарантия</h2>
+                    <p class="card-desc">Добавьте кондиционеры, комплектующие и монтаж</p>
+                  </div>
+                </div>
+                <button type="button" class="btn btn-secondary btn-sm" id="btn-add-item">
+                  <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                  Добавить строку
+                </button>
+              </div>
+
+              <!-- Quick Presets Bar -->
+              <div class="quick-items-bar" id="quick-items-bar">
+                <span class="quick-label">Быстрый выбор:</span>
+                <div class="preset-chips-scroll">
+                  <button type="button" class="item-preset-chip" data-name="Кондиционер Daikin Emura 3 FTXJ20AW/RXJ20A" data-price="13706.50" data-warranty="60">+ Daikin Emura (60 мес)</button>
+                  <button type="button" class="item-preset-chip" data-name="Кондиционер Cooper&Hunter CH-S09FTXE" data-price="2450.00" data-warranty="36">+ Cooper&Hunter (36 мес)</button>
+                  <button type="button" class="item-preset-chip" data-name="Wi-Fi контроллер BRP069B45" data-price="800.00" data-warranty="12">+ Wi-Fi модуль (12 мес)</button>
+                  <button type="button" class="item-preset-chip" data-name="Монтажный комплект и трасса до 3 м" data-price="350.00" data-warranty="24">+ Монтаж (24 мес)</button>
+                </div>
+              </div>
+
+              <!-- Items Table Container -->
+              <div class="items-table-container">
+                <table class="items-table" id="items-table">
+                  <thead>
+                    <tr>
+                      <th class="col-num">№</th>
+                      <th class="col-name">Наименование оборудования / услуги</th>
+                      <th class="col-qty">Кол-во</th>
+                      <th class="col-price">Цена (BYN)</th>
+                      <th class="col-warranty">Гарантия</th>
+                      <th class="col-subtotal">Сумма (BYN)</th>
+                      <th class="col-actions"></th>
+                    </tr>
+                  </thead>
+                  <tbody id="items-tbody">
+                    <!-- Rows rendered by JS -->
+                  </tbody>
+                </table>
+              </div>
+            </section>
+          </div>
+
+          <!-- Right Column: Summary & Actions -->
+          <aside class="form-sidebar-col">
+            <div class="card glass-card sticky-sidebar" id="summary-card">
+              <div class="card-header">
+                <h2 class="card-title">Итог по договору</h2>
+                <div class="live-pill" id="live-indicator">
+                  <span class="pulsing-circle"></span> Live
+                </div>
+              </div>
+
+              <div class="summary-body">
+                <!-- Contract preview number -->
+                <div class="summary-field">
+                  <span class="summary-label">Номер договора</span>
+                  <span class="summary-value contract-num-badge" id="preview-contract-number">
+                    <svg class="badge-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                    <span id="label-contract-number">01-170926-Р</span>
+                  </span>
+                </div>
+
+                <div class="summary-field">
+                  <span class="summary-label">Покупатель</span>
+                  <span class="summary-value buyer-preview" id="label-preview-fio">—</span>
+                </div>
+
+                <div class="summary-field">
+                  <span class="summary-label">Позиций / Единиц</span>
+                  <span class="summary-value" id="label-items-stats">1 позиция (1 шт)</span>
+                </div>
+
+                <hr class="summary-divider">
+
+                <!-- Total Amount Highlight Box -->
+                <div class="total-box" id="total-box">
+                  <span class="total-title">Итого к оплате</span>
+                  <div class="total-sum-row">
+                    <span class="total-digits" id="total-amount-display">0,00</span>
+                    <span class="currency-tag">BYN</span>
+                  </div>
+                  <div class="total-words-box" id="total-words-box">
+                    <span class="words-label">Сумма прописью:</span>
+                    <p class="total-words-text" id="total-words-display">Ноль белорусских рублей 00 копеек</p>
+                  </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="action-buttons-group">
+                  <button type="button" class="btn btn-primary btn-block btn-lg" id="btn-download-docx">
+                    <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                    Скачать Word (.docx)
+                  </button>
+
+                  <button type="button" class="btn btn-drive btn-block" id="btn-save-drive">
+                    <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>
+                    Сохранить в базу и на Drive
+                  </button>
+
+                  <button type="button" class="btn btn-ghost btn-block" id="btn-reset-form">
+                    <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"></polyline><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path></svg>
+                    Очистить форму
+                  </button>
+                </div>
+              </div>
+            </div>
+          </aside>
+        </div>
+      </form>
+    </div>
+
+    <!-- VIEW 2: JOURNAL -->
+    <div class="view-panel" id="tab-journal" role="tabpanel" aria-labelledby="btn-tab-journal">
+      <section class="card glass-card" id="section-journal">
+        <div class="card-header journal-header-row">
+          <div>
+            <h2 class="card-title">Журнал оформленных договоров</h2>
+            <p class="card-desc">Поиск по фамилии или номеру, повторное скачивание и Google Drive</p>
+          </div>
+          <div class="journal-search-wrapper">
+            <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+            <input type="text" id="input-journal-search" class="form-control search-input" placeholder="Поиск по фамилии покупателя или номеру...">
+            <button type="button" class="btn btn-secondary btn-sm" id="btn-refresh-journal">Обновить</button>
+          </div>
+        </div>
+
+        <div class="card-body">
+          <div class="table-responsive">
+            <table class="journal-table" id="journal-table">
+              <thead>
+                <tr>
+                  <th>Номер</th>
+                  <th>Дата</th>
+                  <th>Покупатель (ФИО)</th>
+                  <th>Телефон</th>
+                  <th>Товары</th>
+                  <th>Сумма</th>
+                  <th>Действия</th>
+                </tr>
+              </thead>
+              <tbody id="journal-tbody">
+                <!-- Rows -->
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Empty State -->
+          <div class="empty-state hidden" id="journal-empty-state">
+            <div class="empty-icon-wrap">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
+            </div>
+            <h3>Договоры пока не созданы</h3>
+            <p>Заполните форму во вкладке «Новый договор», чтобы оформить первый документ.</p>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <!-- Mobile Sticky Bottom Action Bar (Thumb Zone) -->
+  <div class="mobile-sticky-bar" id="mobile-sticky-bar" aria-label="Быстрый итог и действие">
+    <div class="mobile-bar-info">
+      <span class="mobile-bar-label" id="mobile-bar-label">Итого (1 поз.):</span>
+      <div class="mobile-bar-total">
+        <span class="mobile-bar-digits" id="mobile-bar-amount">0,00</span>
+        <span class="mobile-bar-curr">BYN</span>
+      </div>
+    </div>
+    <div class="mobile-bar-actions">
+      <button type="button" class="btn btn-primary btn-sm btn-mobile-download" id="btn-mobile-download" title="Скачать Word (.docx)">
+        <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+        <span>Скачать Word</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Modal for Google Drive Confirmation -->
+  <div class="modal-backdrop hidden" id="drive-modal-backdrop">
+    <div class="modal-dialog glass-card" id="drive-modal" role="dialog" aria-modal="true">
+      <div class="modal-header">
+        <div class="success-icon-badge">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
+        </div>
+        <h3 class="modal-title">Договор успешно создан!</h3>
+        <button type="button" class="btn-modal-close" id="btn-close-modal" aria-label="Закрыть">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="modal-info-row">
+          <span class="info-label">Присвоен номер:</span>
+          <strong class="info-val highlight-num" id="modal-contract-number">—</strong>
+        </div>
+        <div class="modal-info-row">
+          <span class="info-label">Файл:</span>
+          <span class="info-val" id="modal-file-name">—</span>
+        </div>
+        <div class="modal-info-row">
+          <span class="info-label">Сумма договора:</span>
+          <strong class="info-val" id="modal-total-amount">—</strong>
+        </div>
+        
+        <div class="drive-link-box hidden" id="modal-drive-box">
+          <span class="drive-label">Ссылка на Google Drive:</span>
+          <a href="#" target="_blank" class="drive-url-link" id="modal-drive-link">
+            <svg class="drive-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+            Открыть документ в Google Диске
+          </a>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" id="btn-modal-download-docx">
+          Скачать Word (.docx)
+        </button>
+        <button type="button" class="btn btn-primary" id="btn-modal-create-another">
+          Оформить следующий
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Container -->
+  <div class="toast-container" id="toast-container" aria-live="polite"></div>
+
+  <!-- Footer -->
+  <footer class="app-footer" id="app-footer">
+    <div class="footer-container">
+      <p>© 2026 ООО «АйсикБел» (IceBel.by). Система формирования розничных договоров.</p>
+      <div class="footer-links">
+        <span class="footer-tag">Шаблон: <code>retail_contract_template.docx</code></span>
+        <span class="footer-tag">Vercel Ready</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>

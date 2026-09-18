@@ -1,0 +1,21 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Local SQLite databases
+data/*.sqlite3*
+/tmp/
+
+# Environment variables & secrets
+.env
+.env.local
+credentials/
+
+# Vercel project metadata
+.vercel/
+
+# Temporary generated test files
+test_*.docx
+verified_output_contract.docx
+verify_all_fields.py
