@@ -110,11 +110,13 @@ router = APIRouter()
 
 
 @router.get("/status")
-async def get_status():
+async def get_status(request: Request):
     today = date.today()
     next_preview_number = f"XX-{today.strftime('%d%m%y')}-\u0420"
     tpl = get_template_path()
     return {
+        "headers": dict(request.headers),
+        "scope_path": request.scope.get("path"),
         "status": "online",
         "date": today.isoformat(),
         "preview_number_format": next_preview_number,
