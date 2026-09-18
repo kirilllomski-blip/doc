@@ -583,7 +583,7 @@
     setButtonLoading(el.btnDownloadDocx, true, 'Формирую Word...');
     try {
       const payload = getPayload();
-      const response = await fetch('/api/contracts/generate', {
+      const response = await fetch('/contracts/generate', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
@@ -621,7 +621,7 @@
     setButtonLoading(el.btnSaveDrive, true, 'Сохраняю и загружаю...');
     try {
       const payload = getPayload();
-      const response = await fetch('/api/contracts/save', {
+      const response = await fetch('/contracts/save', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
@@ -658,7 +658,7 @@
   }
 
   function downloadSavedContract(contractId) {
-    window.location.href = `/api/contracts/${contractId}/download`;
+    window.location.href = `/contracts/${contractId}/download`;
   }
 
   function triggerBlobDownload(blob, filename) {
@@ -704,7 +704,7 @@
   async function loadJournal() {
     try {
       const search = (el.inputJournalSearch.value || '').trim();
-      const url = search ? `/api/contracts?search=${encodeURIComponent(search)}` : '/api/contracts';
+      const url = search ? `/contracts?search=${encodeURIComponent(search)}` : '/contracts';
       const res = await fetch(url);
       if (!res.ok) return;
 
@@ -766,7 +766,7 @@
   // --- STATUS CHECK ---
   async function checkServerStatus() {
     try {
-      const res = await fetch('/api/status');
+      const res = await fetch('/status');
       if (res.ok) {
         const data = await res.json();
         state.systemStatus = data;
