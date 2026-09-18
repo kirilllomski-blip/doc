@@ -62,22 +62,25 @@ app.add_middleware(
 async def resolve_vercel_routing(request: Request, call_next):
     """
     Handles Vercel URL rewrites gracefully:
-    When Vercel rewrites /api/(.*) -> /api/index.py, Vercel supplies
-    x-matched-path (e.g. /api/contracts/generate).
-    This middleware restores the intended path so FastAPI matches routes correctly.
+    1. Reads query parameter __path=$1 from vercel.json rewrite
+    2. Fallback to x-matched-path or x-forwarded-uri headers
     """
-    raw_path = request.scope.get("path", "")
-    matched = (
-        request.headers.get("x-matched-path")
-        or request.headers.get("x-forwarded-uri")
-        or request.headers.get("x-original-url")
-    )
-    if matched:
-        clean_path = matched.split("?")[0]
-        if clean_path and clean_path != raw_path:
-            request.scope["path"] = clean_path
+    path_param = request.query_params.get("__path")
+    if path_param:
+        clean = path_param.strip("/")
+        request.scope["path"] = f"/api/{clean}"
+    else:
+        raw_path = request.scope.get("path", "")
+        matched = (
+            request.headers.get("x-matched-path")
+            or request.headers.get("x-forwarded-uri")
+            or request.headers.get("x-original-url")
+        )
+        if matched:
+            clean_path = matched.split("?")[0]
+            if clean_path and clean_path != raw_path:
+                request.scope["path"] = clean_path
 
-    # If raw path still points to index.py
     current_path = request.scope.get("path", "")
     if current_path in ("/api/index.py", "/index.py", "/api/index", "/index"):
         request.scope["path"] = "/api/status"
