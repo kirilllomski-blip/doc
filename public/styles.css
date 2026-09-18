@@ -1403,115 +1403,152 @@ body {
 
   /* Padding at bottom of main so sticky bar doesn't overlap content */
   .app-main {
-    padding-bottom: 96px;
-    padding-left: 0.75rem;
-    padding-right: 0.75rem;
+    padding-bottom: 125px !important;
+    padding-left: 0.85rem;
+    padding-right: 0.85rem;
   }
 
   /* Header & Navigation */
   .app-header {
-    padding: 0.75rem 1rem;
+    padding: 0.75rem 0.9rem;
   }
 
   .header-container {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 0.75rem;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.65rem;
   }
 
   .brand-group {
-    justify-content: flex-start;
-  }
-
-  .brand-title {
-    font-size: 1.25rem;
-  }
-
-  .brand-subtitle {
-    font-size: 0.72rem;
-  }
-
-  .logo-medallion {
-    width: 38px;
-    height: 38px;
+    order: 1;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    flex: 1;
   }
 
   .system-status {
-    align-self: flex-end;
-    margin-top: -38px;
+    order: 2;
+    display: inline-flex;
+    align-items: center;
+    margin: 0 !important;
     font-size: 0.72rem;
-    padding: 0.25rem 0.6rem;
+    padding: 0.3rem 0.65rem;
+    border-radius: 9999px;
+  }
+
+  .brand-title {
+    font-size: 1.18rem;
+    line-height: 1.2;
+  }
+
+  .brand-tag {
+    font-size: 0.65rem;
+    padding: 0.15rem 0.4rem;
+  }
+
+  .brand-subtitle {
+    display: none; /* Hide long subtitle on mobile to save vertical screen space */
+  }
+
+  .logo-medallion {
+    width: 36px;
+    height: 36px;
+    min-width: 36px;
   }
 
   /* Segmented Nav Tabs */
   .nav-tabs {
+    order: 3;
     width: 100%;
     display: flex;
-    background: rgba(10, 16, 28, 0.85);
+    background: rgba(10, 16, 28, 0.95);
     border: 1px solid var(--chrome-border);
     border-radius: var(--radius-md);
-    padding: 3px;
-    gap: 3px;
+    padding: 4px;
+    gap: 4px;
+    margin-top: 0.2rem;
   }
 
   .nav-btn {
     flex: 1;
     justify-content: center;
-    padding: 0.6rem 0.5rem;
-    font-size: 0.85rem;
-    min-height: 42px;
+    padding: 0.65rem 0.5rem;
+    font-size: 0.88rem;
+    min-height: 44px;
     border-radius: var(--radius-sm);
+    font-weight: 600;
   }
 
   /* Form & Cards */
   .card {
-    border-radius: 14px;
+    border-radius: 16px;
+    margin-bottom: 1.25rem;
   }
 
   .card-header {
-    padding: 1rem 1.2rem;
-    flex-wrap: wrap;
+    padding: 1rem 1.1rem;
+    flex-direction: column;
+    align-items: flex-start;
     gap: 0.75rem;
   }
 
+  .card-header-actions {
+    width: 100%;
+  }
+
+  .card-header-actions .btn {
+    width: 100%;
+    justify-content: center;
+    min-height: 44px;
+    font-size: 0.9rem;
+    font-weight: 600;
+  }
+
   .card-body {
-    padding: 1rem 1.2rem;
+    padding: 1rem 1.1rem;
   }
 
   .form-row-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr !important;
     gap: 1rem;
   }
 
   .span-2 {
-    grid-column: span 1;
+    grid-column: span 1 !important;
   }
 
   .label-with-tools {
     flex-direction: column;
     align-items: flex-start;
-    gap: 0.4rem;
+    gap: 0.5rem;
   }
 
   .quick-helpers {
     width: 100%;
     overflow-x: auto;
-    padding-bottom: 2px;
+    padding-bottom: 4px;
     flex-wrap: nowrap;
+    -webkit-overflow-scrolling: touch;
+    gap: 0.4rem;
   }
 
   .chip-btn {
     white-space: nowrap;
-    padding: 0.35rem 0.65rem;
-    font-size: 0.75rem;
+    padding: 0.45rem 0.8rem;
+    font-size: 0.8rem;
+    min-height: 36px;
+    border-radius: 9999px;
   }
 
   /* Quick presets bar */
   .quick-items-bar {
-    padding: 0.75rem 1rem;
+    padding: 0.85rem 1rem;
     flex-direction: column;
     align-items: flex-start;
-    gap: 0.4rem;
+    gap: 0.55rem;
   }
 
   .preset-chips-scroll {
@@ -1520,28 +1557,29 @@ body {
     flex-wrap: nowrap;
     padding-bottom: 4px;
     -webkit-overflow-scrolling: touch;
+    gap: 0.5rem;
   }
 
   .item-preset-chip {
     white-space: nowrap;
-    padding: 0.4rem 0.75rem;
-    font-size: 0.75rem;
-    min-height: 34px;
+    padding: 0.5rem 0.9rem;
+    font-size: 0.82rem;
+    min-height: 40px;
+    border-radius: 9999px;
   }
 
   /* ==========================================================================
-     Mobile Item Cards (Transforms the 7-column table into touch cards)
+     MOBILE ITEM CARDS (Grid mapping direct table cells to native touch cards)
      ========================================================================== */
   .items-table-container {
-    padding: 0.75rem 0.75rem;
+    padding: 0.4rem 0;
+    overflow-x: visible;
   }
 
   .items-table,
-  .items-table tbody,
-  .items-table tr {
+  .items-table tbody {
     display: block;
     width: 100%;
-    border-collapse: collapse;
   }
 
   .items-table thead {
@@ -1549,191 +1587,372 @@ body {
   }
 
   .items-table tr {
-    position: relative;
-    background: rgba(12, 19, 35, 0.85);
-    border: 1px solid rgba(56, 189, 248, 0.22);
-    border-radius: 14px;
-    padding: 1rem;
-    margin-bottom: 1rem;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
-    display: flex;
-    flex-direction: column;
-    gap: 0.85rem;
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    grid-gap: 0.85rem 0.75rem !important;
+    background: #080e1c !important;
+    border: 1.5px solid rgba(0, 240, 255, 0.28) !important;
+    border-radius: 16px !important;
+    padding: 1.1rem !important;
+    margin-bottom: 1.25rem !important;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45) !important;
+    box-sizing: border-box !important;
+    position: relative !important;
   }
 
   .items-table td {
-    display: flex;
-    flex-direction: column;
+    display: flex !important;
+    flex-direction: column !important;
     padding: 0 !important;
     background: transparent !important;
     border: none !important;
     width: 100% !important;
-    text-align: left !important;
+    min-width: 0 !important;
+    box-sizing: border-box !important;
   }
 
   .items-table td::before {
     content: attr(data-label);
-    font-size: 0.7rem;
-    font-weight: 600;
+    font-size: 0.72rem;
+    font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 0.05em;
-    color: var(--text-muted);
-    margin-bottom: 0.3rem;
+    letter-spacing: 0.06em;
+    color: #94a3b8;
+    margin-bottom: 0.35rem;
   }
 
-  /* Index Badge top-left */
+  /* ROW 1: [№1] Badge (left) & [Удалить ✕] Button (right) */
   .items-table td.col-num {
-    position: absolute;
-    top: 1rem;
-    left: 1rem;
+    grid-row: 1 !important;
+    grid-column: 1 / 2 !important;
+    display: inline-flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
     width: auto !important;
+    background: rgba(0, 240, 255, 0.15) !important;
+    color: #00f0ff !important;
+    border: 1px solid rgba(0, 240, 255, 0.35) !important;
+    border-radius: 8px !important;
+    padding: 0.35rem 0.8rem !important;
+    font-weight: 800 !important;
+    font-size: 0.85rem !important;
+    justify-self: flex-start !important;
+    align-self: center !important;
   }
 
   .items-table td.col-num::before {
-    display: none;
+    display: none !important;
   }
 
-  .items-table td.col-num {
-    background: rgba(56, 189, 248, 0.15) !important;
-    color: var(--neon-cyan) !important;
-    border: 1px solid rgba(56, 189, 248, 0.3) !important;
-    border-radius: 6px;
-    padding: 0.2rem 0.6rem !important;
-    font-weight: 700;
-    font-size: 0.8rem;
-  }
-
-  /* Remove Row button top-right */
   .items-table td.col-actions {
-    position: absolute;
-    top: 0.85rem;
-    right: 0.85rem;
+    grid-row: 1 !important;
+    grid-column: 2 / 3 !important;
+    display: inline-flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: flex-end !important;
     width: auto !important;
+    justify-self: flex-end !important;
+    align-self: center !important;
   }
 
   .items-table td.col-actions::before {
-    display: none;
+    display: none !important;
   }
 
   .btn-remove-row {
-    width: 36px;
-    height: 36px;
+    width: 38px;
+    height: 38px;
+    min-width: 38px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    border-radius: 8px;
-    background: rgba(239, 68, 68, 0.1);
-    color: #f87171;
-    border: 1px solid rgba(239, 68, 68, 0.25);
+    border-radius: 10px;
+    background: rgba(244, 63, 94, 0.12);
+    color: #fb7185;
+    border: 1.5px solid rgba(244, 63, 94, 0.3);
+    cursor: pointer;
+    transition: all 0.2s ease;
   }
 
-  .btn-remove-row:hover,
   .btn-remove-row:active {
-    background: rgba(239, 68, 68, 0.25);
-    color: #fca5a5;
+    background: rgba(244, 63, 94, 0.35);
+    transform: scale(0.95);
   }
 
-  /* Name field */
+  /* ROW 2: Equipment Name (full width) */
   .items-table td.col-name {
-    margin-top: 2rem;
+    grid-row: 2 !important;
+    grid-column: 1 / span 2 !important;
+    margin-top: 0.15rem;
   }
 
   .items-table td.col-name .table-input {
-    min-height: 44px;
-    font-size: 16px;
+    min-height: 48px;
+    font-size: 16px !important;
+    background: #0d1527 !important;
+    border: 1.5px solid rgba(255, 255, 255, 0.2) !important;
+    border-radius: 10px;
+    padding: 0.75rem 0.95rem;
+    color: #ffffff !important;
   }
 
-  /* Quantity & Price side by side */
-  .items-table tr {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-gap: 0.75rem;
+  .items-table td.col-name .table-input:focus {
+    border-color: #00f0ff !important;
+    box-shadow: 0 0 14px rgba(0, 240, 255, 0.4) !important;
   }
 
-  .items-table td.col-num,
-  .items-table td.col-actions {
-    grid-column: span 2;
-  }
-
-  .items-table td.col-name {
-    grid-column: span 2;
-  }
-
+  /* ROW 3: Quantity (left) & Price (right) */
   .items-table td.col-qty {
-    grid-column: span 1;
+    grid-row: 3 !important;
+    grid-column: 1 / 2 !important;
   }
 
   .items-table td.col-price {
-    grid-column: span 1;
+    grid-row: 3 !important;
+    grid-column: 2 / 3 !important;
   }
 
-  .items-table td.col-warranty {
-    grid-column: span 2;
-  }
-
-  .items-table td.col-subtotal {
-    grid-column: span 2;
-    background: rgba(56, 189, 248, 0.08) !important;
-    border: 1px solid rgba(56, 189, 248, 0.2) !important;
+  .qty-control {
+    height: 48px;
+    background: #0d1527 !important;
+    border: 1.5px solid rgba(255, 255, 255, 0.22) !important;
     border-radius: 10px;
-    padding: 0.75rem 1rem !important;
-    flex-direction: row;
-    justify-content: space-between;
+  }
+
+  .qty-btn {
+    width: 44px;
+    height: 48px;
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #00f0ff;
+  }
+
+  .qty-input {
+    height: 48px;
+    font-size: 17px !important;
+    font-weight: 800;
+    color: #ffffff !important;
+  }
+
+  .price-input-wrapper {
+    width: 100%;
+  }
+
+  .item-price-input {
+    height: 48px;
+    min-height: 48px;
+    font-size: 1.18rem !important;
+    font-weight: 800 !important;
+    padding-right: 3.2rem !important;
+    background: #080f1e !important;
+    border: 1.5px solid rgba(0, 240, 255, 0.5) !important;
+    border-radius: 10px;
+    color: #00f0ff !important;
+  }
+
+  .item-price-input:focus {
+    border-color: #00f0ff !important;
+    box-shadow: 0 0 16px rgba(0, 240, 255, 0.5) !important;
+  }
+
+  .price-currency-suffix {
+    right: 0.65rem;
+    font-size: 0.75rem;
+    font-weight: 800;
+    padding: 3px 6px;
+  }
+
+  /* ROW 4: Warranty Options (full width) */
+  .items-table td.col-warranty {
+    grid-row: 4 !important;
+    grid-column: 1 / span 2 !important;
+  }
+
+  .warranty-picker {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr) 1.2fr;
+    gap: 0.4rem;
+    width: 100%;
+  }
+
+  .warranty-btn {
+    min-height: 42px;
+    font-size: 0.82rem;
+    font-weight: 600;
+    padding: 0.4rem 0.2rem;
+    border-radius: 8px;
+    text-align: center;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    color: #cbd5e1;
+    display: flex;
     align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+  }
+
+  .warranty-btn:active {
+    transform: scale(0.96);
+  }
+
+  .warranty-btn.active {
+    background: rgba(0, 240, 255, 0.2) !important;
+    border-color: #00f0ff !important;
+    color: #00f0ff !important;
+    font-weight: 700;
+    box-shadow: 0 0 10px rgba(0, 240, 255, 0.35);
+  }
+
+  .warranty-custom-input {
+    min-height: 42px;
+    font-size: 16px !important;
+    border-radius: 8px;
+    background: #0d1527;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #ffffff;
+    text-align: center;
+    padding: 0 0.5rem;
+  }
+
+  .warranty-custom-input.active {
+    border-color: #00f0ff !important;
+    color: #00f0ff !important;
+    box-shadow: 0 0 10px rgba(0, 240, 255, 0.35);
+  }
+
+  /* ROW 5: Subtotal Highlight (full width) */
+  .items-table td.col-subtotal {
+    grid-row: 5 !important;
+    grid-column: 1 / span 2 !important;
+    background: rgba(0, 240, 255, 0.08) !important;
+    border: 1px solid rgba(0, 240, 255, 0.25) !important;
+    border-radius: 12px;
+    padding: 0.75rem 1rem !important;
+    flex-direction: row !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    margin-top: 0.15rem;
   }
 
   .items-table td.col-subtotal::before {
     margin-bottom: 0;
     font-size: 0.75rem;
+    color: #94a3b8;
   }
 
   .items-table .subtotal-val {
-    font-size: 1.15rem;
-    font-weight: 700;
-    color: var(--neon-cyan);
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: #00f0ff;
     font-family: var(--font-heading);
-  }
-
-  .qty-control {
-    height: 44px;
-  }
-
-  .qty-btn {
-    width: 36px;
-    height: 44px;
-    font-size: 1.1rem;
-  }
-
-  .qty-input {
-    height: 44px;
-    font-size: 16px;
-  }
-
-  .price-input-wrapper .table-input {
-    height: 44px;
-  }
-
-  .warranty-picker {
-    flex-wrap: wrap;
-    gap: 0.35rem;
-  }
-
-  .warranty-btn {
-    flex: 1 1 calc(33.33% - 0.35rem);
-    min-height: 38px;
-    font-size: 0.78rem;
-    padding: 0.35rem 0.5rem;
-    text-align: center;
-  }
-
-  .warranty-custom-input {
-    flex: 1 1 100%;
-    min-height: 38px;
-    font-size: 16px !important;
+    text-shadow: 0 0 10px rgba(0, 240, 255, 0.3);
   }
 
   /* ==========================================================================
-     Mobile Journal Cards
+     MOBILE STICKY BOTTOM ACTION BAR (Thumb Zone with Safe Area)
+     ========================================================================== */
+  .mobile-sticky-bar {
+    display: flex;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 990;
+    background: rgba(6, 10, 22, 0.96);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-top: 1.5px solid rgba(0, 240, 255, 0.4);
+    box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.75);
+    padding: 0.75rem 1rem;
+    padding-bottom: calc(0.75rem + env(safe-area-inset-bottom, 0px));
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+  }
+
+  .mobile-sticky-bar.hidden {
+    display: none !important;
+  }
+
+  .mobile-bar-info {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    flex: 1;
+  }
+
+  .mobile-bar-label {
+    font-size: 0.68rem;
+    color: #94a3b8;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    font-weight: 700;
+    white-space: nowrap;
+  }
+
+  .mobile-bar-total {
+    display: flex;
+    align-items: baseline;
+    gap: 4px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .mobile-bar-digits {
+    font-family: var(--font-heading);
+    font-size: 1.3rem;
+    font-weight: 800;
+    color: #00f0ff;
+    text-shadow: 0 0 14px rgba(0, 240, 255, 0.4);
+  }
+
+  .mobile-bar-curr {
+    font-size: 0.8rem;
+    color: #94a3b8;
+    font-weight: 700;
+  }
+
+  .mobile-bar-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .btn-mobile-save {
+    min-height: 46px;
+    padding: 0.65rem 0.85rem;
+    font-size: 0.85rem;
+    font-weight: 700;
+    border-radius: 12px;
+    background: rgba(16, 185, 129, 0.15);
+    border: 1.5px solid rgba(16, 185, 129, 0.4);
+    color: #34d399;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+  }
+
+  .btn-mobile-save:active {
+    background: rgba(16, 185, 129, 0.35);
+  }
+
+  .btn-mobile-download {
+    min-height: 46px;
+    padding: 0.65rem 1.15rem;
+    font-size: 0.92rem;
+    font-weight: 700;
+    border-radius: 12px;
+    white-space: nowrap;
+    box-shadow: 0 4px 18px rgba(0, 240, 255, 0.35);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+
+  /* ==========================================================================
+     MOBILE JOURNAL CARDS
      ========================================================================== */
   .journal-header-row {
     flex-direction: column;
@@ -1749,12 +1968,15 @@ body {
 
   .journal-search-wrapper .search-input {
     width: 100%;
-    height: 44px;
+    height: 46px;
+    font-size: 16px !important;
   }
 
   .journal-search-wrapper #btn-refresh-journal {
     width: 100%;
-    height: 40px;
+    height: 44px;
+    font-size: 0.9rem;
+    font-weight: 600;
   }
 
   .table-responsive {
@@ -1774,31 +1996,31 @@ body {
   }
 
   .journal-table tr {
-    background: rgba(12, 19, 35, 0.85);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 14px;
-    padding: 1rem;
-    margin-bottom: 1rem;
+    background: #080e1c !important;
+    border: 1.5px solid rgba(255, 255, 255, 0.12) !important;
+    border-radius: 16px;
+    padding: 1.1rem;
+    margin-bottom: 1.25rem;
     display: flex;
     flex-direction: column;
-    gap: 0.6rem;
-    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
+    gap: 0.75rem;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4);
   }
 
   .journal-table td {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 0.25rem 0;
+    padding: 0.3rem 0;
     border: none;
-    font-size: 0.88rem;
+    font-size: 0.92rem;
   }
 
   .journal-table td::before {
     content: attr(data-label);
     font-size: 0.72rem;
-    font-weight: 600;
-    color: var(--text-muted);
+    font-weight: 700;
+    color: #94a3b8;
     text-transform: uppercase;
     letter-spacing: 0.05em;
   }
@@ -1808,16 +2030,16 @@ body {
     align-items: flex-start;
     white-space: normal !important;
     max-width: 100% !important;
-    background: rgba(255, 255, 255, 0.02);
-    padding: 0.5rem 0.6rem;
-    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.03);
+    padding: 0.6rem 0.75rem;
+    border-radius: 10px;
     margin: 0.2rem 0;
   }
 
   .journal-table td.journal-actions-col {
-    padding-top: 0.75rem;
-    border-top: 1px solid rgba(255, 255, 255, 0.08);
-    margin-top: 0.3rem;
+    padding-top: 0.85rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.12);
+    margin-top: 0.35rem;
   }
 
   .journal-table td.journal-actions-col::before {
@@ -1827,119 +2049,90 @@ body {
   .journal-table td.journal-actions-col .action-btns-cell {
     width: 100%;
     display: flex;
-    gap: 0.5rem;
+    gap: 0.6rem;
   }
 
   .journal-table td.journal-actions-col .btn {
     flex: 1;
-    min-height: 42px;
+    min-height: 44px;
     justify-content: center;
-    font-size: 0.88rem;
-  }
-
-  /* ==========================================================================
-     Mobile Sticky Bottom Action Bar
-     ========================================================================== */
-  .mobile-sticky-bar {
-    display: flex;
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    z-index: 990;
-    background: rgba(10, 16, 30, 0.94);
-    backdrop-filter: blur(18px);
-    -webkit-backdrop-filter: blur(18px);
-    border-top: 1px solid rgba(56, 189, 248, 0.35);
-    box-shadow: 0 -8px 28px rgba(0, 0, 0, 0.65);
-    padding: 0.75rem 1rem;
-    padding-bottom: calc(0.75rem + env(safe-area-inset-bottom, 0px));
-    align-items: center;
-    justify-content: space-between;
-    gap: 0.75rem;
-  }
-
-  .mobile-sticky-bar.hidden {
-    display: none !important;
-  }
-
-  .mobile-bar-info {
-    display: flex;
-    flex-direction: column;
-  }
-
-  .mobile-bar-label {
-    font-size: 0.7rem;
-    color: var(--text-muted);
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    font-weight: 600;
-  }
-
-  .mobile-bar-total {
-    display: flex;
-    align-items: baseline;
-    gap: 4px;
-  }
-
-  .mobile-bar-digits {
-    font-family: var(--font-heading);
-    font-size: 1.25rem;
-    font-weight: 800;
-    color: var(--neon-cyan);
-    text-shadow: 0 0 14px rgba(0, 240, 255, 0.35);
-  }
-
-  .mobile-bar-curr {
-    font-size: 0.8rem;
-    color: var(--text-muted);
-    font-weight: 600;
-  }
-
-  .btn-mobile-download {
-    padding: 0.65rem 1.1rem;
     font-size: 0.9rem;
     font-weight: 600;
-    border-radius: var(--radius-md);
-    min-height: 44px;
-    white-space: nowrap;
-    box-shadow: 0 4px 16px rgba(0, 240, 255, 0.3);
   }
 
-  /* Modal responsive */
+  /* Modal Sheet on Mobile */
   .modal-dialog {
-    width: 94vw;
-    margin: 1rem;
-    padding: 1.25rem;
+    width: 95vw;
+    max-width: 480px;
+    margin: 1rem auto;
+    padding: 1.35rem;
+    border-radius: 20px;
   }
 
   .modal-footer {
     flex-direction: column;
-    gap: 0.5rem;
+    gap: 0.6rem;
   }
 
   .modal-footer .btn {
     width: 100%;
-    min-height: 44px;
+    min-height: 46px;
+    font-size: 0.92rem;
   }
 }
 
 /* Small Smartphone Screen (max-width: 480px) */
 @media (max-width: 480px) {
-  .brand-title {
-    font-size: 1.1rem;
-  }
-
-  .brand-tag {
-    font-size: 0.68rem;
-    padding: 0.15rem 0.4rem;
+  .warranty-picker {
+    grid-template-columns: repeat(3, 1fr) 1fr 1fr;
   }
 
   .items-table tr {
-    padding: 0.85rem;
+    padding: 0.9rem !important;
+    grid-gap: 0.7rem 0.5rem !important;
   }
 
   .mobile-bar-digits {
-    font-size: 1.15rem;
+    font-size: 1.18rem;
+  }
+
+  .btn-mobile-download {
+    padding: 0.6rem 0.9rem;
+    font-size: 0.88rem;
+  }
+
+  .btn-mobile-save {
+    padding: 0.6rem 0.75rem;
+  }
+}
+
+/* Very Small Screen (max-width: 380px) */
+@media (max-width: 380px) {
+  .warranty-picker {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .warranty-custom-input {
+    grid-column: span 2;
+  }
+
+  .items-table td.col-qty {
+    grid-row: 3 !important;
+    grid-column: 1 / span 2 !important;
+  }
+
+  .items-table td.col-price {
+    grid-row: 4 !important;
+    grid-column: 1 / span 2 !important;
+  }
+
+  .items-table td.col-warranty {
+    grid-row: 5 !important;
+    grid-column: 1 / span 2 !important;
+  }
+
+  .items-table td.col-subtotal {
+    grid-row: 6 !important;
+    grid-column: 1 / span 2 !important;
   }
 }

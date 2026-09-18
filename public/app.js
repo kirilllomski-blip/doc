@@ -82,6 +82,7 @@
     mobileBarLabel: document.getElementById('mobile-bar-label'),
     mobileBarAmount: document.getElementById('mobile-bar-amount'),
     btnMobileDownload: document.getElementById('btn-mobile-download'),
+    btnMobileSave: document.getElementById('btn-mobile-save'),
   };
 
   let lastSavedContractId = null;
@@ -200,6 +201,9 @@
     el.btnDownloadDocx.addEventListener('click', handleDownloadDocx);
     if (el.btnMobileDownload) {
       el.btnMobileDownload.addEventListener('click', handleDownloadDocx);
+    }
+    if (el.btnMobileSave) {
+      el.btnMobileSave.addEventListener('click', handleSaveAndDrive);
     }
     el.btnSaveDrive.addEventListener('click', handleSaveAndDrive);
     el.btnResetForm.addEventListener('click', resetForm);
