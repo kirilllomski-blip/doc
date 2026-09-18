@@ -354,12 +354,12 @@
         <td class="col-price" data-label="Цена (BYN)">
           <div class="price-input-wrapper">
             <input 
-              type="number" 
+              type="text" 
               class="table-input item-price-input" 
-              step="0.01" 
-              min="0" 
               inputmode="decimal"
-              value="${item.price.toFixed(2)}" 
+              value="${item.price > 0 ? item.price.toFixed(2) : ''}" 
+              placeholder="0.00"
+              autocomplete="off"
               data-field="price"
             >
             <span class="price-currency-suffix">BYN</span>
@@ -428,10 +428,22 @@
       });
 
       const priceInput = tr.querySelector('.item-price-input');
+      priceInput.addEventListener('focus', (e) => {
+        e.target.select();
+      });
       priceInput.addEventListener('input', (e) => {
-        item.price = Math.max(0, parseFloat(e.target.value) || 0);
+        const raw = e.target.value.replace(/,/g, '.').replace(/[^0-9.]/g, '');
+        const parsed = parseFloat(raw);
+        item.price = isNaN(parsed) || parsed < 0 ? 0 : parsed;
         updateRowSubtotal(tr, item);
         updateSummary();
+      });
+      priceInput.addEventListener('blur', (e) => {
+        if (item.price > 0) {
+          e.target.value = item.price.toFixed(2);
+        } else {
+          e.target.value = '';
+        }
       });
 
       tr.querySelectorAll('.warranty-btn').forEach((btn) => {

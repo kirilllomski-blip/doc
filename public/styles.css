@@ -1,3 +1,13 @@
+
+/* Remove ugly browser spin buttons and arrows from number inputs */
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none !important;
+  margin: 0 !important;
+}
+input[type="number"] {
+  -moz-appearance: textfield !important;
+}
 /* ==========================================================================
    IceBel.by Contracts — Official Corporate Theme
    Identity: Metallic Chrome / Silver + Electric Neon Cyan & Azure + Midnight Black
@@ -579,37 +589,84 @@ body {
   text-align: center;
 }
 
-.col-num { width: 40px; text-align: center; }
-.col-name { min-width: 240px; }
-.col-qty { width: 100px; }
-.col-price { width: 130px; }
-.col-warranty { min-width: 230px; }
-.col-subtotal { width: 120px; text-align: right; }
+.col-num { width: 44px; text-align: center; }
+.col-name { min-width: 260px; }
+.col-qty { width: 110px; }
+.col-price { width: 175px; min-width: 165px; }
+.col-warranty { min-width: 240px; }
+.col-subtotal { width: 130px; text-align: right; }
 .col-actions { width: 44px; }
 
 .table-input {
   width: 100%;
-  padding: 0.55rem 0.75rem;
-  background: rgba(6, 10, 20, 0.8);
-  border: 1px solid var(--chrome-border);
+  padding: 0.65rem 0.85rem;
+  background: #0d1527 !important;
+  border: 1.5px solid rgba(255, 255, 255, 0.22) !important;
   border-radius: var(--radius-sm);
-  color: var(--text-primary);
+  color: #ffffff !important;
   font-family: var(--font-body);
-  font-size: 0.875rem;
+  font-size: 0.95rem;
+  font-weight: 500;
   outline: none;
   transition: var(--transition);
+  box-sizing: border-box;
 }
 
 .table-input:focus {
-  border-color: var(--neon-cyan);
-  box-shadow: 0 0 10px rgba(0, 240, 255, 0.2);
+  border-color: var(--neon-cyan) !important;
+  box-shadow: 0 0 14px rgba(0, 240, 255, 0.4) !important;
+  background: #111c33 !important;
+  color: #ffffff !important;
+}
+
+.table-input::placeholder {
+  color: #64748b !important;
+  opacity: 0.85;
+}
+
+.price-input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.item-price-input {
+  background: #080f1e !important;
+  border: 1.5px solid rgba(0, 240, 255, 0.45) !important;
+  color: #00f0ff !important;
+  font-size: 1.12rem !important;
+  font-weight: 700 !important;
+  padding-right: 3.4rem !important;
+  letter-spacing: 0.02em;
+  text-shadow: 0 0 8px rgba(0, 240, 255, 0.3);
+}
+
+.item-price-input:focus {
+  border-color: #00f0ff !important;
+  box-shadow: 0 0 18px rgba(0, 240, 255, 0.55) !important;
+  background: #0c1830 !important;
+  color: #00f0ff !important;
+}
+
+.price-currency-suffix {
+  position: absolute;
+  right: 0.65rem;
+  font-size: 0.75rem;
+  color: #00f0ff;
+  background: rgba(0, 240, 255, 0.15);
+  border: 1px solid rgba(0, 240, 255, 0.35);
+  border-radius: 4px;
+  padding: 2px 7px;
+  font-weight: 700;
+  pointer-events: none;
 }
 
 .qty-control {
   display: flex;
   align-items: center;
-  background: rgba(6, 10, 20, 0.8);
-  border: 1px solid var(--chrome-border);
+  background: #0d1527;
+  border: 1.5px solid rgba(255, 255, 255, 0.22);
   border-radius: var(--radius-sm);
   overflow: hidden;
 }
@@ -617,27 +674,31 @@ body {
 .qty-btn {
   background: transparent;
   border: none;
-  color: var(--text-secondary);
-  width: 26px;
-  height: 32px;
+  color: var(--neon-cyan);
+  width: 28px;
+  height: 36px;
   cursor: pointer;
-  font-weight: 600;
+  font-weight: 700;
+  font-size: 1.1rem;
   transition: var(--transition);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .qty-btn:hover {
-  background: rgba(255, 255, 255, 0.1);
-  color: #fff;
+  background: rgba(0, 240, 255, 0.2);
+  color: #ffffff;
 }
 
 .qty-input {
-  width: 38px;
+  width: 42px;
   text-align: center;
   background: transparent;
   border: none;
-  color: var(--text-primary);
-  font-weight: 600;
-  font-size: 0.875rem;
+  color: #ffffff !important;
+  font-weight: 700;
+  font-size: 1rem;
   outline: none;
 }
 

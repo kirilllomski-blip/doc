@@ -9,13 +9,13 @@ _NAME_RE = re.compile(r"^[\u0400-\u04FFa-zA-Z-]+$")
 def normalize_fio(value: str) -> str:
     parts = [part for part in value.strip().split() if part]
     if len(parts) < 2:
-        raise ValueError("Введите как минимум фамилию и имя (например, Ломский Кирилл)")
+        raise ValueError("Введите как минимум фамилию и имя (например, Иванов Иван)")
     if len(parts) > 4:
         raise ValueError("Слишком длинное ФИО (максимум 4 слова)")
     for part in parts:
         if not _NAME_RE.fullmatch(part):
-            raise ValueError(f"В ФИО допустимы только буквы и дефис: {part}")
-    
+            raise ValueError(f"В ФИО допустимы только буквы: {part}")
+
     formatted = []
     for part in parts:
         if "-" in part:
@@ -47,16 +47,21 @@ def normalize_phone(value: str) -> str:
         digits = "375" + digits
 
     if digits.startswith("375") and len(digits) == 12:
-        return "+" + digits
+        code = digits[3:5]
+        p1 = digits[5:8]
+        p2 = digits[8:10]
+        p3 = digits[10:12]
+        return f"+375 ({code}) {p1}-{p2}-{p3}"
+
     if len(digits) < 9 or len(digits) > 15:
-        raise ValueError("Проверьте номер телефона: укажите белорусский номер (+375...)")
+        raise ValueError("Проверьте номер телефона: укажите корректный номер (+375...)")
     return "+" + digits if value.strip().startswith("+") else digits
 
 
 def normalize_address(value: str) -> str:
     address = " ".join(value.strip().split())
     if not address:
-        raise ValueError("Введите адрес")
+        raise ValueError("Укажите адрес доставки или монтажа")
     lowered = address.lower()
     belarus = "республика беларусь"
     if belarus not in lowered:

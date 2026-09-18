@@ -8,7 +8,7 @@ from pathlib import Path
 from typing import Any, List, Optional
 from urllib.parse import quote
 
-from fastapi import FastAPI, HTTPException, Query, Response, status
+from fastapi import APIRouter, FastAPI, HTTPException, Query, Request, Response, status
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse, JSONResponse, StreamingResponse
 from fastapi.staticfiles import StaticFiles
@@ -21,17 +21,26 @@ from .services.drive import GoogleDriveService
 from .services.money import format_money, money_in_words, parse_money_to_cents
 from .services.names import buyer_initials, normalize_address, normalize_fio, normalize_phone, safe_filename
 
-# Paths
+# Paths & Template Resolution
 BASE_DIR = Path(__file__).resolve().parent.parent
-TEMPLATES_DIR = BASE_DIR / "templates"
-TEMPLATE_PATH = TEMPLATES_DIR / "retail_contract_template.docx"
 PUBLIC_DIR = BASE_DIR / "public"
 
-if not TEMPLATE_PATH.exists():
-    # Fallback to local sibling directory if needed
-    alt_template = Path(__file__).resolve().parent / "templates" / "retail_contract_template.docx"
-    if alt_template.exists():
-        TEMPLATE_PATH = alt_template
+
+def get_template_path() -> Path:
+    candidates = [
+        Path(__file__).resolve().parent / "templates" / "retail_contract_template.docx",
+        BASE_DIR / "templates" / "retail_contract_template.docx",
+        Path("templates/retail_contract_template.docx").resolve(),
+        Path("api/templates/retail_contract_template.docx").resolve(),
+    ]
+    for c in candidates:
+        if c.exists():
+            return c
+    # Return standard as default
+    return BASE_DIR / "templates" / "retail_contract_template.docx"
+
+
+TEMPLATE_PATH = get_template_path()
 
 # Initialize app
 app = FastAPI(
@@ -48,12 +57,40 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+
+@app.middleware("http")
+async def resolve_vercel_routing(request: Request, call_next):
+    """
+    Handles Vercel URL rewrites gracefully:
+    When Vercel rewrites /api/(.*) -> /api/index.py, Vercel supplies
+    x-matched-path (e.g. /api/contracts/generate).
+    This middleware restores the intended path so FastAPI matches routes correctly.
+    """
+    raw_path = request.scope.get("path", "")
+    matched = (
+        request.headers.get("x-matched-path")
+        or request.headers.get("x-forwarded-uri")
+        or request.headers.get("x-original-url")
+    )
+    if matched:
+        clean_path = matched.split("?")[0]
+        if clean_path and clean_path != raw_path:
+            request.scope["path"] = clean_path
+
+    # If raw path still points to index.py
+    current_path = request.scope.get("path", "")
+    if current_path in ("/api/index.py", "/index.py", "/api/index", "/index"):
+        request.scope["path"] = "/api/status"
+
+    return await call_next(request)
+
+
 db_manager = DatabaseManager()
 drive_service = GoogleDriveService()
 
 
 class ContractItemModel(BaseModel):
-    name: str = Field(..., min_length=1, description="Наименование товара / услуги")
+    name: str = Field(..., min_length=1, description="Наименование товара")
     quantity: int = Field(1, ge=1, description="Количество")
     unit_price_cents: int = Field(..., ge=0, description="Цена за единицу в копейках")
     warranty_months: int = Field(12, ge=0, description="Срок гарантии в месяцах")
@@ -62,26 +99,33 @@ class ContractItemModel(BaseModel):
 class ContractRequestModel(BaseModel):
     buyer_fio: str = Field(..., min_length=3, description="ФИО покупателя")
     phone: str = Field(..., min_length=5, description="Номер телефона")
-    address: str = Field(..., min_length=3, description="Адрес покупателя для договора")
+    address: str = Field(..., min_length=3, description="Адрес доставки или монтажа")
     contract_date: Optional[str] = Field(None, description="Дата договора YYYY-MM-DD")
-    contract_number: Optional[str] = Field(None, description="Пользовательский номер договора если указан")
-    items: List[ContractItemModel] = Field(..., min_items=1, description="Список товаров")
+    contract_number: Optional[str] = Field(None, description="Номер договора если задан вручную")
+    items: List[ContractItemModel] = Field(..., min_items=1, description="Список позиций спецификации")
 
 
-@app.get("/api/status")
+# Define API endpoints using APIRouter
+router = APIRouter()
+
+
+@router.get("/status")
 async def get_status():
     today = date.today()
     next_preview_number = f"XX-{today.strftime('%d%m%y')}-\u0420"
+    tpl = get_template_path()
     return {
         "status": "online",
         "date": today.isoformat(),
         "preview_number_format": next_preview_number,
         "google_drive_configured": drive_service.is_configured(),
         "database": str(db_manager.db_path.name),
+        "template_found": tpl.exists(),
+        "template_path": str(tpl),
     }
 
 
-@app.post("/api/preview")
+@router.post("/preview")
 async def preview_contract(payload: ContractRequestModel):
     try:
         norm_fio = normalize_fio(payload.buyer_fio)
@@ -125,7 +169,11 @@ async def preview_contract(payload: ContractRequestModel):
 
 def _build_docx(payload: ContractRequestModel, contract_number: str, contract_date_obj: date) -> tuple[Path, str, int]:
     temp_dir = Path(tempfile.mkdtemp(prefix="icebel_"))
-    generator = ContractDocumentGenerator(TEMPLATE_PATH, temp_dir)
+    tpl_path = get_template_path()
+    if not tpl_path.exists():
+        raise RuntimeError(f"Файл шаблона retail_contract_template.docx не найден ({tpl_path})")
+
+    generator = ContractDocumentGenerator(tpl_path, temp_dir)
 
     norm_fio = normalize_fio(payload.buyer_fio)
     norm_phone = normalize_phone(payload.phone)
@@ -144,7 +192,7 @@ def _build_docx(payload: ContractRequestModel, contract_number: str, contract_da
     return generated.path, generated.file_name, generated.total_cents
 
 
-@app.post("/api/contracts/generate")
+@router.post("/contracts/generate")
 async def generate_contract_file(payload: ContractRequestModel):
     c_date = date.fromisoformat(payload.contract_date) if payload.contract_date else date.today()
     number = payload.contract_number
@@ -174,7 +222,7 @@ async def generate_contract_file(payload: ContractRequestModel):
     )
 
 
-@app.post("/api/contracts/save")
+@router.post("/contracts/save")
 async def save_and_generate_contract(payload: ContractRequestModel):
     c_date = date.fromisoformat(payload.contract_date) if payload.contract_date else date.today()
     number = payload.contract_number or db_manager.reserve_contract_number(c_date)
@@ -182,7 +230,7 @@ async def save_and_generate_contract(payload: ContractRequestModel):
     try:
         doc_path, filename, total_cents = _build_docx(payload, number, c_date)
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Ошибка сохранения договора: {e}")
+        raise HTTPException(status_code=500, detail=f"Ошибка генерации документа: {e}")
 
     drive_id = None
     drive_link = None
@@ -191,7 +239,6 @@ async def save_and_generate_contract(payload: ContractRequestModel):
         try:
             drive_id, drive_link = drive_service.upload_contract(doc_path, filename)
         except Exception as e:
-            # We don't fail the whole request if drive upload encounters an issue, but we log/return info
             print(f"Drive upload error: {e}")
 
     norm_fio = normalize_fio(payload.buyer_fio)
@@ -226,9 +273,8 @@ async def save_and_generate_contract(payload: ContractRequestModel):
     }
 
 
-@app.get("/api/contracts/{contract_id}/download")
+@router.get("/contracts/{contract_id}/download")
 async def download_saved_contract(contract_id: int):
-    # Lookup in db
     with db_manager._get_connection() as conn:
         cur = conn.cursor()
         cur.execute("SELECT * FROM contracts WHERE id = ?", (contract_id,))
@@ -264,10 +310,15 @@ async def download_saved_contract(contract_id: int):
     )
 
 
-@app.get("/api/contracts")
-async def list_contracts(search: Optional[str] = Query(None, description="Поиск по фамилии или номеру")):
+@router.get("/contracts")
+async def list_contracts(search: Optional[str] = Query(None, description="Поиск по фамилии или номеру договора")):
     return db_manager.list_contracts(limit=50, search=search)
 
+
+# Register routes BOTH with /api prefix AND without /api prefix
+# This guarantees 100% compatibility with every Vercel routing configuration
+app.include_router(router, prefix="/api")
+app.include_router(router, prefix="")
 
 # Serve frontend in local mode
 if PUBLIC_DIR.exists():
